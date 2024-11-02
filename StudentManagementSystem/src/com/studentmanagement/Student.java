@@ -2,6 +2,8 @@ package com.studentmanagement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -123,7 +125,11 @@ public class Student {
 			System.err.println("Invaild course !!. Please enter anyone from following :" + Arrays.toString(courses));
 			return false;
 		}
+	}
 
+	@Override
+	public String toString() {
+		return "Student [name=" + name + ", age=" + age + ", studentID=" + studentID + ", courses=" + courses + "]";
 	}
 
 }
