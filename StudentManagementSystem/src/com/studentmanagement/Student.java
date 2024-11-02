@@ -1,7 +1,10 @@
 package com.studentmanagement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Student {
 	private String name;
@@ -16,10 +19,12 @@ public class Student {
 	 */
 	public Student(String name, int age, String studentID) {
 		super();
-		this.name = name;
-		this.age = age;
-		this.studentID = studentID;
-		courses = new ArrayList<String>();
+		if (validateAge(age) && validateStudentName(name) && validateStudentID(studentID)) {
+			this.name = name;
+			this.age = age;
+			this.studentID = studentID;
+			courses = new ArrayList<String>();
+		}
 	}
 
 	public String getName() {
@@ -55,8 +60,14 @@ public class Student {
 	}
 
 	public void enrollCourse(String course) {
-		courses.add(course);
-		System.out.println("Student " + name + " is successfully enrolled for the course :" + course);
+		if (validateCourses(course)) {
+			if (!courses.contains(course)) {
+				courses.add(course);
+				System.out.println("Student " + name + " is successfully enrolled for the course :" + course);
+			} else {
+				System.err.println("Student " + name + " is already enrolled for the course :" + course);
+			}
+		}
 	}
 
 	public void printStudentInfo() {
@@ -66,4 +77,53 @@ public class Student {
 		System.out.println("Student Age: " + age);
 		System.out.println("Enrolled Couses: " + courses);
 	}
+
+	private boolean validateAge(int age) {
+		if (age >= 15 && age <= 60) {
+			return true;
+		} else {
+			System.err.println("Invaild Age !!. Please enter the age between 15 to 60");
+			return false;
+		}
+	}
+
+	private boolean validateStudentName(String studentName) {
+		String regexPattern = "^[a-zA-Z\\s]+$";
+		Pattern stdNameCompile = Pattern.compile(regexPattern);
+		Matcher stdNameMatcher = stdNameCompile.matcher(studentName);
+
+		if (stdNameMatcher.matches()) {
+			return true;
+		} else {
+			System.err.println("Invaild Name !!. Please enter the valid name");
+			return false;
+		}
+	}
+
+	private boolean validateStudentID(String studentID) {
+		String stdIDPattern = "S-\\d+$";
+		Pattern stdIDCompile = Pattern.compile(stdIDPattern);
+		Matcher stdIDMatcher = stdIDCompile.matcher(studentID);
+
+		if (stdIDMatcher.matches()) {
+			return true;
+		} else {
+			System.err.println("Invaild ID !!. Please enter the valid ID");
+			return false;
+		}
+	}
+
+	private boolean validateCourses(String course) {
+		course = course.toLowerCase();
+		String courses[] = { "java", "dsa", "devops" };
+
+		if (Arrays.asList(courses).contains(course)) {
+			return true;
+		} else {
+			System.err.println("Invaild course !!. Please enter anyone from following :" + Arrays.toString(courses));
+			return false;
+		}
+
+	}
+
 }
